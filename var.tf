@@ -28,7 +28,7 @@ variable "ami" {
 }
 variable "instance_type" {
   type = string
-  default = "t2.micro"
+  default = "t3.micro"
 }
 
 variable "tags" {
