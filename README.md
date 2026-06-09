@@ -1,4 +1,4 @@
-# terraform-EC2
+
 # Terraform EC2 Infrastructure on AWS
 
 ## Overview
