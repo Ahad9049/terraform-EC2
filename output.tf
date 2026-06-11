@@ -13,3 +13,6 @@ output "key_pair_used" {
 output "username" {
   value = var.ec2_username
 }
+output "workspace" {
+  value = terraform.workspace
+  }
