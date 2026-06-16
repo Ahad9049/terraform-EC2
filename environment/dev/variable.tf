@@ -42,3 +42,6 @@ variable "volume_type" {
   type = string
 
 }
+variable "environment" {
+  type = string
+}
