@@ -1,171 +1,140 @@
+# Terraform EC2 — Multi-Environment Infrastructure 🚀
 
-# Terraform EC2 Infrastructure on AWS
+> One codebase. Three isolated environments. Zero duplicate code.
+
+---
 
 ## Overview
 
-This project uses Terraform to provision and manage AWS infrastructure as code. It automates the deployment of Amazon EC2 instances, security groups, and SSH key pair integration, making infrastructure deployment consistent, repeatable, and scalable.
+A production-grade Terraform project that provisions EC2 instances with Security Groups across **Dev**, **Staging**, and **Production** environments using Terraform Workspaces and a modular structure.
 
-## Architecture
+```
+One command to build. One command to destroy.
+Same code. Every environment. Always consistent.
+```
 
-The infrastructure includes:
-
-* AWS EC2 Instance(s)
-* AWS Security Group
-* SSH Key Pair Authentication
-* Configurable Instance Count
-* Configurable Instance Type
-* Terraform State Management
+---
 
 ## Project Structure
 
-```text
+```
 terraform-EC2/
-│
-├── main.tf
-├── variables.tf
-├── outputs.tf
-├── provider.tf
-├── terraform.tfvars.example
+├── environment/
+│   ├── dev/
+│   │   └── stg.tfvars
+│   ├── stg/
+│   │   └── stg.tfvars
+│   └── prod/
+│       └── stg.tfvars
+├── module/
+│   └── ec2/
+│       ├── main.tf        # EC2 + Security Group resources
+│       ├── var.tf         # Input variables
+│       └── output.tf      # Output values
 ├── .gitignore
 ├── .terraform.lock.hcl
+├── terraform.tfstate
+├── terraform.tfstate.backup
 └── README.md
 ```
 
+---
+
+## What Gets Provisioned
+
+- ✅ EC2 instance (t2.micro)
+- ✅ Security Group with SSH inbound rules
+- ✅ Key pair for secure access
+- ✅ Isolated state per environment
+- ✅ Modular and reusable structure
+
+---
+
+## Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| **Terraform** | Infrastructure as Code |
+| **AWS EC2** | Compute instances |
+| **Terraform Workspaces** | Multi-environment management |
+| **HCL** | HashiCorp Configuration Language |
+| **Git** | Version control |
+
+---
+
 ## Prerequisites
 
-Before using this project, ensure the following are installed:
-
-* Terraform
-* AWS CLI
-* Git
-* AWS Account with IAM User
-
-Verify installations:
-
-```bash
-terraform -version
-aws --version
-git --version
-```
-
-## AWS Configuration
-
-Configure AWS credentials:
+- [Terraform](https://developer.hashicorp.com/terraform/install) installed
+- AWS CLI configured with credentials
+- Git installed
 
 ```bash
 aws configure
+terraform --version
 ```
 
-Provide:
+---
 
-```text
-AWS Access Key ID
-AWS Secret Access Key
-Default Region
-Output Format
-```
+## Quick Start
 
-Verify authentication:
-
+**1. Clone the repository:**
 ```bash
-aws sts get-caller-identity
+git clone https://github.com/Ahad9049/terraform-EC2.git
+cd terraform-EC2
 ```
 
-## Variables
-
-Example configuration:
-
-```hcl
-ami            = "ami-xxxxxxxxxxxxx"
-instance_type  = "t2.micro"
-instance_count = 1
-key_name       = "my-key"
-```
-
-Create a file named:
-
-```text
-terraform.tfvars
-```
-
-and provide your values.
-
-## Initialize Terraform
-
+**2. Initialize Terraform:**
 ```bash
 terraform init
 ```
 
-## Validate Configuration
-
+**3. Create and switch workspaces:**
 ```bash
-terraform validate
+# Create environments
+terraform workspace new dev
+terraform workspace new stg
+terraform workspace new prod
+
+# Switch to desired environment
+terraform workspace select dev
 ```
 
-## Preview Changes
-
+**4. Plan and apply:**
 ```bash
-terraform plan
+terraform plan -var-file="environment/dev/stg.tfvars"
+terraform apply -var-file="environment/dev/stg.tfvars"
 ```
 
-## Deploy Infrastructure
-
+**5. Destroy when done:**
 ```bash
-terraform apply
+terraform destroy -var-file="environment/dev/stg.tfvars"
 ```
 
-Type:
+---
 
-```text
-yes
-```
+## Workspaces
 
-when prompted.
+| Workspace | Purpose |
+|-----------|---------|
+| **dev** | Development — break things freely |
+| **stg** | Staging — test before it matters |
+| **prod** | Production — real traffic, zero tolerance |
 
-## View Outputs
+Each workspace maintains its **own isolated state** — zero interference between environments. ✅
 
-```bash
-terraform output
-```
+---
 
-## Destroy Infrastructure
+## Security Group Rules
 
-To avoid AWS charges, destroy resources when finished:
+| Type | Port | Protocol | Source |
+|------|------|----------|--------|
+| Inbound | 22 (SSH) | TCP | 0.0.0.0/0 |
+| Outbound | All | All | 0.0.0.0/0 |
 
-```bash
-terraform destroy
-```
-
-## Security Best Practices
-
-* Never commit AWS credentials.
-* Never commit private SSH keys.
-* Never commit terraform.tfvars containing sensitive values.
-* Use IAM users with least-privilege permissions.
-* Store secrets securely.
-
-## Technologies Used
-
-* Terraform
-* AWS EC2
-* AWS IAM
-* AWS Security Groups
-* Git
-* GitHub
-
-## Learning Objectives
-
-This project demonstrates:
-
-* Infrastructure as Code (IaC)
-* Terraform resource management
-* AWS provisioning automation
-* Variable management
-* State management
-* Version control for infrastructure
+---
 
 ## Author
 
-Abdul Ahad
+**Abdul Ahad** — [@Ahad9049](https://github.com/Ahad9049)
 
-Aspiring DevOps Engineer focused on AWS, Terraform, Linux, Jenkins, Docker, Kubernetes, and Automation.
+⭐ Star this repo if it helped you!
