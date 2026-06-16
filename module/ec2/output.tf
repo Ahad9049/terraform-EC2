@@ -8,11 +8,8 @@ output "public_dns" {
 }
 
 output "key_pair_used" {
-  value = aws_key_pair.default.key_name
+  value = var.key_name
 }
 output "username" {
   value = var.ec2_username
 }
-output "workspace" {
-  value = terraform.workspace
-  }

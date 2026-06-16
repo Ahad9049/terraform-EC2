@@ -28,8 +28,8 @@ resource "aws_instance" "ec2" {
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   count = var.instance_count
   tags = {
-    Name = "${var.tags["Name"]}-${terraform.workspace}-${count.index}"
-    "Environment" = terraform.workspace
+    Name = "${var.tags["Name"]}-${var.environment}-${count.index+1}"
+    "Environment" = var.environment
   }
   root_block_device {
     volume_size = var.volume_size
