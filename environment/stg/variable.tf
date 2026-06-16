@@ -1,5 +1,5 @@
 variable "instance_count" {
-  type  = number
+  type        = number
   description = "Number of EC2 instances"
 }
 variable "ec2_username" {
@@ -10,7 +10,7 @@ variable "key_name" {
 }
 
 variable "ec2_sg" {
-  type = string
+  type        = string
   description = "Security group name"
 }
 variable "ssh_port" {
@@ -25,7 +25,7 @@ variable "instance_type" {
 }
 
 variable "tags" {
-    type = map(string)
+  type = map(string)
 }
 variable "volume_size" {
   type = number
