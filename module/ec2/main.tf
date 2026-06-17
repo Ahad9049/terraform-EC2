@@ -4,13 +4,16 @@ resource "aws_security_group" "ec2_sg" {
   name        = var.ec2_sg
   description = "Allow SSH inbound traffic"
 
-  ingress {
-    from_port   = var.ssh_port
-    to_port     = var.ssh_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  dynamic "ingress" {
+    for_each = var.allowed_ports
 
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -20,15 +23,18 @@ resource "aws_security_group" "ec2_sg" {
 }
 
 
+
 # Create EC2 Instance
 resource "aws_instance" "ec2" {
-  ami                    = var.ami  #Amazon Linux
+  ami                    = var.ami #Amazon Linux
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  count = var.instance_count
+  count                  = var.instance_count
+
+  user_data = var.user_data
   tags = {
-    Name = "${var.tags["Name"]}-${var.environment}-${count.index+1}"
+    Name          = "${var.tags["Name"]}-${var.environment}-${count.index + 1}"
     "Environment" = var.environment
   }
   root_block_device {
