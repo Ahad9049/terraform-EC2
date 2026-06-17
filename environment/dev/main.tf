@@ -3,12 +3,20 @@ resource "aws_key_pair" "default" {
   public_key = file("C:/Users/ahad1/.ssh/id_ed25519.pub") # Change if needed  
 }
 module "dev_ec2" {
-  source         = "../../module/ec2"
-  environment    = var.environment
-  ami            = var.ami
-  instance_type  = var.instance_type
-  key_name       = var.key_name
-  ec2_username   = var.ec2_username
+  source        = "../../module/ec2"
+  environment   = var.environment
+  ami           = var.ami
+  instance_type = var.instance_type
+  key_name      = var.key_name
+  ec2_username  = var.ec2_username
+
+  user_data = templatefile(
+    "${path.root}/../../scripts/nginx.sh",
+    {
+      environment = var.environment
+    }
+  )
+  allowed_ports  = var.allowed_ports
   ec2_sg         = var.ec2_sg
   ssh_port       = var.ssh_port
   instance_count = var.instance_count

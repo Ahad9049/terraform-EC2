@@ -45,3 +45,6 @@ variable "volume_type" {
 variable "environment" {
   type = string
 }
+variable "allowed_ports" {
+  type = list(number)
+}
